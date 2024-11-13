@@ -44,7 +44,7 @@ public class Server {
                         dataOutputStream.writeUTF("файл больше 1кб ");
                     }
                 } catch (IOException e) {
-                    System.out.println("Клиент " + e.getMessage());
+                    throw new RuntimeException(e);
                 }
             }
         } catch (IOException e) {
