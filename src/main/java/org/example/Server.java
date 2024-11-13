@@ -1,10 +1,11 @@
 package org.example;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class Server {
     private static final int PORT = 8081;
@@ -23,7 +24,6 @@ public class Server {
                     // Прийом файлу
                     String fileName = dataInputStream.readUTF();
                     int fileSize = dataInputStream.readInt();
-                    String content = dataInputStream.readUTF();
 
                     if (fileSize <= 1024) {
                         byte[] buffer = new byte[(int) fileSize];
@@ -36,15 +36,12 @@ public class Server {
 
                         System.out.println("Файл сохранен: " + fileName);
                         //отправка обратно
-                        //it's sends metadata too, but it's not necessary because you have this file
-                        dataOutputStream.writeUTF("1");
+                        dataOutputStream.writeUTF("Файл ополучен и отправлен");
                         dataOutputStream.writeLong(fileSize);
                         dataOutputStream.write(buffer);
-
-                        Files.writeString(new File(fileName).toPath(), content);
                     } else {
                         System.out.println("файл слишком большой");
-                        dataOutputStream.writeUTF("2");
+                        dataOutputStream.writeUTF("файл больше 1кб ");
                     }
                 } catch (IOException e) {
                     System.out.println("Клиент " + e.getMessage());
